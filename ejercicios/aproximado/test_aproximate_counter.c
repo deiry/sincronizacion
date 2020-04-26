@@ -7,26 +7,33 @@
 #define THRESHOLD 1024
 
 /* structs */
-// code here (if you required it)...
+counter_t counter;
 
 /* start_routine header */
-// code here...
+void * start_routine(void *);
 
 /* Global variables */
-// code here (if you required it)...
+int MAXCNT;
+int NUMTHREADS;
 
 int main(int argc, char *argv[]) { 
 
+        if (argc < 3)
+    {
+        printf("Ingrese todos los argumentos\n");
+        exit(0);
+    }
     /* get the command's line parameters */
-    // code here...
+    MAXCNT = atoi(argv[1]);
+    NUMTHREADS = atoi(argv[2]);
 
 
     /* Declaration of struct timeval variables */
-    // code here...
+    struct timeval ti, tf;
 
 
     /* Initializing conter */
-    // code here...
+     init(&counter, THRESHOLD);
 
 
     /* Threads handlers */
@@ -34,23 +41,33 @@ int main(int argc, char *argv[]) {
 
 
     /* Thread creation */
-    // code here...
+    double tiempo;
+    pthread_t tid[NUMTHREADS];
+    int i = 0;
 
 
     /* Time starts counting */
-    // code here...
+    gettimeofday(&ti, NULL);
 
 
     /* Creating a Threads */
-    // code here...
+    for (i = 0; i < NUMTHREADS; i++)
+    {
+        pthread_create(&tid[i], NULL, &start_routine, NULL);
+    }
    
 
     /* Threads joins */
-    // code here...
+    for (i = 0; i < NUMTHREADS; i++)
+    {
+        pthread_join(tid[i], NULL);
+    }
 
 
     /* Time stops counting here */
-    // code here...
+    gettimeofday(&tf, NULL); 
+
+   
 
 
     /* get the end time */
@@ -58,18 +75,29 @@ int main(int argc, char *argv[]) {
     
 
     /* get the elapset time (end_time - start_time) */
-    // code here...
+    tiempo = (tf.tv_sec - ti.tv_sec) * 1000 + (tf.tv_usec - ti.tv_usec) / 1000.0;
 
 
     /* print the results (number threads employed, counter value, elasep time) */
-    // code here...
+    printf("\nHilos %d - Tiempo %f\n", NUMTHREADS,  tiempo);
+   
+    printf("Valor del contador: %d\n",get(&counter));
+    printf("Contador debería ser: %d\n", MAXCNT);
 
 
     return 0;
 }
 
 /* start_routine definition */
-// code here...
+void * start_routine(void * param){
+        
+        while(get(&counter) < MAXCNT){
+            printf("Value counter %d\n",get(&counter));
+            update(&counter,pthread_self(),1);
+        }  
+
+
+}
 
 
 

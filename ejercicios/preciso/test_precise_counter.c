@@ -13,12 +13,11 @@ counter_t counter;
 
 
 /* start_routine header */
-void *counting(void *);
+void * start_routine(void *);
 
 /* Global variables */
 int MAXCNT;
 int NUMTHREADS;
-
 
 int main(int argc, char *argv[])
 {
@@ -41,15 +40,15 @@ int main(int argc, char *argv[])
     gettimeofday(&ti, NULL);
     for (i = 0; i < NUMTHREADS; i++)
     {
-        pthread_create(&tid[i], NULL, &counting, NULL);
+        pthread_create(&tid[i], NULL, &start_routine, NULL);
     }
     for (i = 0; i < NUMTHREADS; i++)
     {
         pthread_join(tid[i], NULL);
     }
 
-    gettimeofday(&tf, NULL); // Instante final
-    //destroy(&counter);
+    gettimeofday(&tf, NULL); 
+
     tiempo = (tf.tv_sec - ti.tv_sec) * 1000 + (tf.tv_usec - ti.tv_usec) / 1000.0;
     
     printf("\nHilos %d - Tiempo %f\n", NUMTHREADS,  tiempo);
@@ -60,7 +59,7 @@ int main(int argc, char *argv[])
 }
 
 /* Function Thread*/
-void *counting(void *unused)
+void * start_routine(void *unused)
 {
     int i= 0;
     for(i=0; i < MAXCNT; i++){
