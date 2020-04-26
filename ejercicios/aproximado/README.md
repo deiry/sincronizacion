@@ -29,7 +29,7 @@ Adicionalmente se recomienda que tenga los siguientes documentos a la mano:
 
 ### Paso 1 ###
 
-Complete el archivo [test_aproximate_counter.c](test_aproximate_counter.c) empleando 1024 como valor del humbral (S) de tal manera que permita ingresar desde linea de comandos los siguientes parametros:
+Complete el archivo [test_aproximate_counter.c](test_aproximate_counter.c) empleando 1024 como valor del umbral (S) de tal manera que permita ingresar desde linea de comandos los siguientes parametros:
 1. Valor maximo del contador: ```MAXCNT```
 2. Numero de hilos que seran lanzados: ```NUMTHREADS```
    
