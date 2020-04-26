@@ -2,7 +2,7 @@
 
 ## Archivos disponibles ##
 
-Para el desarrollo de esta parte del laboratorio se proporsionan los siguientes 3 archivos:
+Para el desarrollo de esta parte del laboratorio se proporcionan los siguientes 3 archivos:
 1. [counter.h](counter.h): Archivo cabecera del contador preciso (tomado del texto guia).
 2. [counter.c](counter.c) Archivo fuente del contador preciso (tomado del texto guia).
 3. [test_precise_counter.c](test_precise_counter.c): Archivo a completar con el fin de analizar el impacto en el desempeño al crear hilos que usen el contador simple (archivo a completar).
