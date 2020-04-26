@@ -4,124 +4,69 @@
 #include <sys/time.h>
 #include "counter.h"
 
+//#define NUMTHREADS 4
+//#define MAXCNT 100
 
 /* structs */
- counter_t counter;
+counter_t counter;
 
 
-// code here (if you required it)...
 
 /* start_routine header */
-void do_nothing();
-void init(counter_t *c);
-void* increment(void *c);
-void decrement(counter_t *c);
-int get(counter_t *c);
+void *counting(void *);
 
 /* Global variables */
 int MAXCNT;
 int NUMTHREADS;
-char *x, *y;
-int main(int argc, char *argv[]) { 
 
-    if(argc < 3){
+
+int main(int argc, char *argv[])
+{
+    if (argc < 3)
+    {
         printf("Ingrese todos los argumentos\n");
         exit(0);
     }
-    MAXCNT =  atoi(argv[1]);
+    MAXCNT = atoi(argv[1]);
     NUMTHREADS = atoi(argv[2]);
 
-    printf("Max cont %d Num threads %d\n",MAXCNT,NUMTHREADS);
-
-    /* Declaration of struct timeval variables */
     struct timeval ti, tf;
 
-
-    /* Initializing conter */
     init(&counter);
+
     double tiempo;
-  
+    pthread_t tid[NUMTHREADS];
+    int i = 0;
 
-    /* Threads handlers */
-     pthread_t hilo[NUMTHREADS];
-
-
-    /* Thread creation */
-    
-
-    /* Time starts counting */
-    gettimeofday(&ti, NULL); 
-
-
-
-    /* Creating a Threads */
-    for(int i=0 ; i < NUMTHREADS ; i++){   
-        int count = get(&counter);
-        printf("%s %d \n", "Antes del if ",count);
-             pthread_create(&hilo[i], NULL,(void *)increment, &counter);
-     
-       
-    };
-
-   
-
-    /* Threads joins */
-    for(int j = 0; j < NUMTHREADS; j++){
-         printf("%s","join thread\n");
-        pthread_join(hilo[j], NULL);
+    gettimeofday(&ti, NULL);
+    for (i = 0; i < NUMTHREADS; i++)
+    {
+        pthread_create(&tid[i], NULL, &counting, NULL);
+    }
+    for (i = 0; i < NUMTHREADS; i++)
+    {
+        pthread_join(tid[i], NULL);
     }
 
-
-    /* Time stops counting here */
-    gettimeofday(&tf, NULL);   // Instante final
-
-
-    /* get the end time */
+    gettimeofday(&tf, NULL); // Instante final
+    //destroy(&counter);
+    tiempo = (tf.tv_sec - ti.tv_sec) * 1000 + (tf.tv_usec - ti.tv_usec) / 1000.0;
     
-     tiempo = (tf.tv_sec - ti.tv_sec)*1000 + (tf.tv_usec - ti.tv_usec)/1000.0;
-    
-
-    /* get the elapset time (end_time - start_time) */
-    // code here...
-
-
-    /* print the results (number threads employed, counter value, elasep time) */
-    printf("%lf", tiempo);
-
-
+    printf("\nHilos %d - Tiempo %f\n", NUMTHREADS,  tiempo);
+    printf("Valor del contador: %d\n", get(&counter));
+    printf("Contador debería ser: %d\n", MAXCNT*NUMTHREADS);
+ 
     return 0;
 }
 
-/* start_routine definition */
-void do_nothing(){
-    int z;
-    pthread_exit(NULL);
+/* Function Thread*/
+void *counting(void *unused)
+{
+    int i= 0;
+    for(i=0; i < MAXCNT; i++){
+         increment(&counter);
+    } 
+
+    return NULL;
 }
 
-void init(counter_t *c) {
-    c->value = 0;
-    pthread_mutex_init(&c->lock, NULL);
-    printf("%s","init lock\n");
-}
-
-void* increment(void *param) { 
-    counter_t *c = (struct counter_t *)param;
-    printf("%s","antes lock metodo increment\n");
-    
-    pthread_mutex_lock(&c->lock);
-    printf("%s","metodo increment\n");
-    c->value++;
-    pthread_mutex_unlock(&c->lock);
-}
-
-void decrement(counter_t *c) {
-    pthread_mutex_lock(&c->lock);
-    c->value--;
-    pthread_mutex_unlock(&c->lock);
-}
-
-int get(counter_t *c) {
-    pthread_mutex_lock(&c->lock);
-    return c->value;
-    pthread_mutex_unlock(&c->lock);
-}
