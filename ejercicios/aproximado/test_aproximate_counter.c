@@ -92,14 +92,8 @@ int main(int argc, char *argv[]) {
 void * start_routine(void * param){
         
         while(get(&counter) < MAXCNT){
-            printf("Value counter %d\n",get(&counter));
             update(&counter,pthread_self(),1);
         }  
 
 
 }
-
-
-
-
-
