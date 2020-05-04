@@ -23,7 +23,7 @@ typedef struct __list_t {
 } list_t;
 
 void list_init(list_t *l);
-void insert_list(list_t *l, int key, book *b);
+void list_insert(list_t *l, int key, book *b);
 int list_lookup(list_t *l, int key);
 void books_init(list_t *l);
 #endif
