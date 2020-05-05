@@ -18,10 +18,10 @@ void list_insert(list_t *l, int key, book *b) {
     }
     new->key = key;
     new->book = b;
-    pthread_mutex_lock(&L->lock); //I don't know
+    pthread_mutex_lock(&l->lock); //I don't know
     new->next = l->head;
     l->head = new;
-    pthread_mutex_unlock(&L->lock);
+    pthread_mutex_unlock(&l->lock);
     new->available = 1;
  }
 
