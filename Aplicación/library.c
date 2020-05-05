@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <pthread.h>
-#include "concurren_linked_list.h"
+#include "concurrent_linked_list.h"
 #include <sys/time.h>
 
 typedef struct __office_results {
@@ -33,7 +33,7 @@ int main(){
         office *offc = malloc(sizeof(office));
         offc->id = i;
         offc->seed = (int)rand();
-        offc->results = malloc(sizeof(results));
+        offc->results = malloc(sizeof(office_results));
         office_info[i] = offc;
         printf("Office %d initialized with seed %d\n", i, offc->seed);
     }
@@ -55,7 +55,7 @@ int main(){
         pthread_join(offices[i], NULL);
         printf("Office %d has finished its workload, successful loans %d, failed loans %d\n",i,office_info[i]->results->successful_loan,office_info[i]->results->failed_loan);
         total_success = total_success + office_info[i]->results->successful_loan;
-        total_fails = total_fails + office_info[i]->results->c;
+        total_fails = total_fails + office_info[i]->results->failed_loan;
     }
     
     
